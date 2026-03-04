@@ -1,34 +1,23 @@
 # Introduction
-PyZBC2014 is a barebones Python 3 wrapper around the Zilany, Bruce, and Carney (2014) auditory-nerve (AN) model, which is written in C. 
-Currently, PyZBC2014 is set up as a Python package (i.e., it can be imported like `using pyzbc2014 as zbc` in Python scripts), but installing PyZBC2014 currently requires some manual steps.
+PyZBC2014 is a barebones Python 3 wrapper around the Zilany, Bruce, and Carney (2014) auditory-nerve (AN) model, which is written in C.
+Currently, PyZBC2014 is set up as a Python package (i.e., it can be imported like `import pyzbc2014 as zbc` in Python scripts).
 
 PyZBC2014 is licensed under the GNU AGPLv3 license (see `LICENSE`).
 Please send any questions or issues to `daniel_guest@urmc.rochester.edu`, or raise an issue on the [GitHub page](https://github.com/guestdaniel/PyZBC2014).
 
 # Install
-## Download
-To install PyZBC2014, first download (and, if needed, unpack) the files from [GitHub page](https://github.com/guestdaniel/PyZBC2014).
+## Requirements
+- Python>=3.10
+- numpy>=1.21.0
+- scipy>=1.7.2
 
-## Compile model
-Next, compile the `.c` files that are bundled with the package by navigating to the `pyzbc2014/model`
-folder and running the following code for GCC (or equivalent code, based on your C
-compiler).
-If you are successful, you should see a file called `libzbc2014.so` in the `model` folder, alongside `.c`, `.o`, and some other files.
-
-### Windows (with gcc)
-Installing and using C compilers on Windows can be a pain; you may want to try https://www.msys2.org/.
-With `gcc` installed, the following command will compile the model:
-```
-gcc -fPIC -O3 -shared -o libzbc2014.so complex.c model_IHC.c model_Synapse.c
-```
+Ensure you have the required dependencies installed before trying to install this package — pip will likely produce an error if you don't.
 
 ## Install package
-Finally, to install the package, activate your desired Python environment and, in the top-level folder, use:
+Use pip to install
 ```
-pip install .
+pip install pyzbc2014
 ```
-Adjust `pip` to `pip3` or others as needed based on your Python environment configuration.
-If installation succeeds, you should now be able to `import pyzbc2014 as zbc`
 
 ## Uninstall package
 Use pip to uninstall:
@@ -37,7 +26,7 @@ pip uninstall pyzbc2014
 ```
 
 # Usage
-PyZBC2014 defines two function, `sim_ihc_zbc2014` and `sim_anrate_zbc2014`, to simulate inner-hair-cell (IHC) potentials from sound-pressure waveforms or AN instantaneous rates from IHC potentials, respectively.
+PyZBC2014 defines two functions, `sim_ihc_zbc2014` and `sim_anrate_zbc2014`, to simulate inner-hair-cell (IHC) potentials from sound-pressure waveforms or AN instantaneous rates from IHC potentials, respectively.
 Comparing to the origianl MATLAB/Mex implementation of the 2014 model, these behave similarly to the `IHCAN` and `Synapse` functions, respectively, with some small differences in behavior and some improvements in quality-of-life.
 
 ## Simulate IHC response
@@ -69,3 +58,28 @@ The full function call using default keyword arguments is thus:
 ```
 anrate = sim_anrate_zbc2014(ihc, cf=1e3, nrep=1, fs=100e3, fibertype="hsr", powerlaw="approx", noisetype="fresh")
 ```
+
+# Citing
+If you use this code, please cite the model paper:
+
+Zilany, M. S., Bruce, I. C., & Carney, L. H. (2014). Updated parameters and expanded simulation options for a model of the auditory periphery. The Journal of the Acoustical Society of America, 135(1), 283-286.
+
+
+# Developers
+This package is setup to build wheels whenever the version is incremented, but you have to manually trigger the action to publish to PyPI. To make any updates, follow these steps:
+1. Edit the code, fix bugs, update docs, etc.
+2. Bump the version in `src/pyzbc2014/__init__.py`
+3. Commit the changes and push to GitHub. For example:
+```
+git add --all
+git commit -m "[commit message]"
+git push origin main
+```
+4. Create and push a matching git tag when you want to build the wheels.
+```
+git tag v0.0.1  # this tag needs to match the version in `pyzbc2014/__init__.py`
+git push origin v0.0.1  # again, match the tag
+```
+GitHub Actions should then check the version and build the wheels automatically. Make sure it completes these steps successfully. While you're debugging, you may not wish to bump the version every time. You can manually trigger the wheel building action workflow "Check version and publish wheels" in GitHub actions.
+
+To publish the new version to PyPI, the version must have been incremented. After testing the code and checking the wheels all built without error, run the GitHub action "Publish to PyPI".

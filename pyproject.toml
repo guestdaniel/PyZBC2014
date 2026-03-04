@@ -4,10 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project] 
 name = "pyzbc2014"
-version = "0.0.1"
-authors = [{name = "Daniel Guest", email="daniel_guest@urmc.rochester.edu"}]
-readme = "README.md"
-dependencies = [
-    "numpy>=1.21.0",
-    "scipy>=1.7.0"
+description = "Simple Python 3 wrapper for the Zilany, Bruce, and Carney (2014) auditory nerve model."
+dynamic = ["version"] # version is set dynamically, not as a string
+authors = [
+  { name = "Daniel Guest", email = "daniel_guest@urmc.rochester.edu" },
+  { name = "Thomas Stoll", email = "tomstoll@med.umich.edu" }
 ]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.21.0",
+  "scipy>=1.7.2"
+]
+license = {file = "LICENSE"}
+keywords = ["auditory", "nerve", "model", "zilany", "bruce", "carney", "2014"]
+
+[tool.setuptools.dynamic]
+version = {attr = "pyzbc2014.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["pyzbc2014*", "pyzbc2014.model*"]

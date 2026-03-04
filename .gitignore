@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.dll
+*.pyd
 
 # C extensions
 *.so
@@ -165,3 +167,12 @@ apcmodels/
 *.o
 *.so
 *.zip
+
+# Project-specific build artifacts
+src/pyzbc2014/model/libzbc2014.*
+src/pyzbc2014/model/*.o
+src/pyzbc2014/model/*.a
+src/pyzbc2014/model/*.out
+
+# CIBW/workflow build artifacts
+wheelhouse/
